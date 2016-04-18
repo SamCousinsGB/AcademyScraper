@@ -23,29 +23,23 @@ namespace AcademyScraper
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            using (var client = new System.Net.WebClient())
+
+            string url = "http://www.reddishvulcans.com/uk_tournament_database.asp";
+            var Webget = new HtmlWeb();
+            var doc = Webget.Load(url);
+
+            var root = doc.DocumentNode;
+            var nodes = root.Descendants();
+            foreach (HtmlNode node in doc.DocumentNode.SelectSingleNode("//div[@class='infobox']").Descendants()) 
             {
-                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-                var filename = System.IO.Path.GetTempFileName();
-
-                client.DownloadFile("http://www.reddishvulcans.com/uk_tournament_database.asp", filename);
-
-                
-                doc.Load(filename);
-
-
-
-                var root = doc.DocumentNode;
-
-                var a_nodes = root.Descendants("a").ToList();
-
-                foreach (var a_node in a_nodes)
+                if(node.InnerHtml.Trim() != "" && node.OuterHtml.Trim() != "" && node.InnerHtml.Trim() != null && node.OuterHtml.Trim() != null)
                 {
-                   
-                    MessageBox.Show(a_node.GetAttributeValue("href", ""));
-                    MessageBox.Show(a_node.InnerText.Trim());
+                    MessageBox.Show(node.InnerHtml.Trim());
                 }
+                
+               
             }
+
         }
     }
 }
