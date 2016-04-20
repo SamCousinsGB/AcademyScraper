@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using FileHelpers;
 
@@ -16,30 +17,60 @@ namespace AcademyScraper
 {
     public partial class Main : Form
     {
+
+
+
         public Main()
         {
             InitializeComponent();
+            savePathTB.Text = "C:/Users/" + Environment.UserName + "/Desktop/scrape.csv";
         }
+
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
 
-            string url = "http://www.reddishvulcans.com/uk_tournament_database.asp";
-            var Webget = new HtmlWeb();
-            var doc = Webget.Load(url);
 
-            var root = doc.DocumentNode;
-            var nodes = root.Descendants();
-            foreach (HtmlNode node in doc.DocumentNode.SelectSingleNode("//div[@class='infobox']").Descendants()) 
+
+            List<Record> recordList = RecordCreator.getRecords();
+
+           
+
+          
+
+            var engine = new FileHelperAsyncEngine<Record>();
+
+            engine.HeaderText = engine.GetFileHeader();
+
+            try
             {
-                if(node.InnerHtml.Trim() != "" && node.OuterHtml.Trim() != "" && node.InnerHtml.Trim() != null && node.OuterHtml.Trim() != null)
+                using (engine.BeginWriteFile(savePathTB.Text))
                 {
-                    MessageBox.Show(node.InnerHtml.Trim());
+                    foreach (Record rec in recordList)
+                    {
+                        engine.WriteNext(rec);
+                    }
                 }
-                
-               
+                DialogResult result;
+                result = MessageBox.Show("Done! Open file?", "File generated.", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start(savePathTB.Text);
+                }
+
+            }
+            catch(Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+
             }
 
+
+
+
         }
+
+
     }
 }
