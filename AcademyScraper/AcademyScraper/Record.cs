@@ -23,6 +23,6 @@ namespace AcademyScraper
 
         public string LINK;
 
-        public string TEAMS;
+        public string SPACES;
     }
 }

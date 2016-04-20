@@ -30,20 +30,20 @@ namespace AcademyScraper
         private void saveBtn_Click(object sender, EventArgs e)
         {
 
-
-
-            List<Record> recordList = RecordCreator.getRecords();
-
            
 
-          
+                List<Record> recordList = RecordCreator.getRecords();
 
-            var engine = new FileHelperAsyncEngine<Record>();
-
-            engine.HeaderText = engine.GetFileHeader();
 
             try
             {
+
+
+                var engine = new FileHelperAsyncEngine<Record>();
+
+            engine.HeaderText = engine.GetFileHeader();
+
+            
                 using (engine.BeginWriteFile(savePathTB.Text))
                 {
                     foreach (Record rec in recordList)
