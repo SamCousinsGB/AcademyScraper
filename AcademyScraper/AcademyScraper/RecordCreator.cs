@@ -27,52 +27,61 @@ namespace AcademyScraper
             var dates = root.SelectNodes("//div[@class='infobox']/table/tr[3]/td[2]");
 
             var addresses = root.SelectNodes("//div[@class='infobox']/table/tr/td[1]");
-
-            var spaces = root.SelectNodes("//div[@class='infobox']/table/tr[2]/td");
-            var perside = root.SelectNodes("//div[@class='infobox']/table/tr[3]/td[2]");
-            var genders = root.SelectNodes("//div[@class='infobox']/table/tr[3]/td[2]");
-
             var ages = root.SelectNodes("//div[@class='infobox']/table/tr[5]/td/img");
-
+            //    var perside = root.SelectNodes("//div[@class='infobox']/table/tr/td[1]/strong");
+            var perside = root.SelectNodes(".//div[@class='infobox']/table/tr[4]/td[1]");
+            var genders = root.SelectNodes("//div[@class='infobox']/table/tr[3]/td[2]");
             var links = root.SelectNodes("//div[@class='infobox']/table/tr/td[1]/a");
+            var spaces = root.SelectNodes("//div[@class='infobox']/table/tr[2]/td");
 
             List<Record> recordList = new List<Record>();
             List<String> tournamentNames = new List<String>();
             List<String> tournamentDates = new List<String>();
             List<String> tournamentAddresses = new List<String>();
-            List<String> tournamentSpaces = new List<String>();
+            List<String> tournamentAges = new List<String>();
             List<String> tournamentPerSide = new List<String>();
             List<String> tournamentGenders = new List<String>();
-            List<String> tournamentAges = new List<String>();
             List<String> tournamentLinks = new List<String>();
+            List<String> tournamentSpaces = new List<String>();
+           
+            #region Names - Done
+
 
             foreach (var tag in names)
             {
                 if (tag.InnerText != "View Available Space and Book Online")
                 {
                     String title = tag.InnerText.Replace(",", "");
-                    title = title.Replace(" =-", "");
+                    title = title.Replace("=", "");
                     tournamentNames.Add(title);
                 }
             }
 
+            #endregion 
+
+            #region Dates - Done
+
             foreach (var tag in dates)
             {
-                
                 String date = tag.InnerText.Replace(",", "");
                 date = date.Replace("&nbsp;", "");
                 date = date.Replace(System.Environment.NewLine, "");
                 date = date.Replace("    ", "");
                 tournamentDates.Add(date);
-        
             }
+
+            #endregion // Done
+
+            #region Addresses
 
             foreach (var tag in addresses)
             {
-
                 tournamentAddresses.Add("1");
-
             }
+
+            #endregion
+
+            #region Ages - Done
 
             List<String> recordAges = new List<String>();
 
@@ -119,7 +128,6 @@ namespace AcademyScraper
                     continue;
                 }
 
-
                 if (age.GetAttributeValue("src", "nope") == "images/2016/u10_Yes.gif")
                 {
                     recordAges.Add(" U10 ");
@@ -129,7 +137,6 @@ namespace AcademyScraper
                 {
                     continue;
                 }
-
 
                 if (age.GetAttributeValue("src", "nope") == "images/2016/u11_Yes.gif")
                 {
@@ -141,7 +148,6 @@ namespace AcademyScraper
                     continue;
                 }
 
-
                 if (age.GetAttributeValue("src", "nope") == "images/2016/u12_Yes.gif")
                 {
                     recordAges.Add(" U12 ");
@@ -151,7 +157,6 @@ namespace AcademyScraper
                 {
                     continue;
                 }
-
 
                 if (age.GetAttributeValue("src", "nope") == "images/2016/u13_Yes.gif")
                 {
@@ -163,7 +168,6 @@ namespace AcademyScraper
                     continue;
                 }
 
-
                 if (age.GetAttributeValue("src", "nope") == "images/2016/u14_Yes.gif")
                 {
                     recordAges.Add(" U14 ");
@@ -173,7 +177,6 @@ namespace AcademyScraper
                 {
                     continue;
                 }
-
 
                 if (age.GetAttributeValue("src", "nope") == "images/2016/u15_Yes.gif")
                 {
@@ -198,27 +201,56 @@ namespace AcademyScraper
                 String final = "";
                 foreach (String record in recordAges)
                 {
-
                     final += record;
-
                 }
 
                 tournamentAges.Add(final);
                 recordAges.Clear();
 
             }
-          
+
+            #endregion
+
+            #region Perside
+
+
+
+            foreach (var tag in perside)
+            {
+                HtmlNode node = tag.SelectSingleNode(".//img[4]");
+                if (node != null)
+                {
+                    tournamentPerSide.Add(node.GetAttributeValue("title", "none"));
+                }
+                else
+                {
+                    tournamentPerSide.Add("");
+                }   
+            }
+    
+            #endregion
+
+            #region Genders
+
+            #endregion
 
             #region Links
             foreach (var tag in links)
             {
 
-                string link = tag.GetAttributeValue("href", "N/A");
-                link = link.Replace("&nbsp;", "");
-                link = link.Replace(System.Environment.NewLine, "");
-                link = link.Replace("    ", "");
-                link = "http://www.reddishvulcans.com/" + link;
-                tournamentLinks.Add(link);
+               
+
+
+                if(tag.InnerText != "View Available Space and Book Online")
+                {
+                    string link = tag.GetAttributeValue("href", "N/A");
+                    link = link.Replace("&nbsp;", "");
+                    link = link.Replace(System.Environment.NewLine, "");
+                    link = link.Replace("    ", "");
+                    link = "http://www.reddishvulcans.com/" + link;
+                    tournamentLinks.Add(link);
+                }
+                
 
             }
 
@@ -234,7 +266,7 @@ namespace AcademyScraper
             #endregion
 
             #region Build Record List
-            for (var i = 0; i < tournamentNames.Count(); i++)
+            for (var i = 0; i < tournamentDates.Count(); i++)
             {
                 recordList.Add(new Record()
                 {
@@ -242,7 +274,7 @@ namespace AcademyScraper
                     DATE = tournamentDates[i],
                     ADDRESS = tournamentAddresses[i],
                     AGE_GROUPS = tournamentAges[i],
-                    NUM_PER_SIDE = "",
+                    NUM_PER_SIDE = tournamentPerSide[i],
                     GENDER = "",
                     LINK = tournamentLinks[i],
                     SPACES = tournamentSpaces[i]
@@ -251,7 +283,6 @@ namespace AcademyScraper
 
             return recordList;
             #endregion
-
 
         }
 
