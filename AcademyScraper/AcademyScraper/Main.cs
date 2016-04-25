@@ -30,18 +30,14 @@ namespace AcademyScraper
         private void saveBtn_Click(object sender, EventArgs e)
         {
 
-           
-
-                List<Record> recordList = RecordCreator.getRecords();
-
+            List<Record> recordList = RecordCreator.getRecords();
 
             try
             {
 
-
                 var engine = new FileHelperAsyncEngine<Record>();
 
-            engine.HeaderText = engine.GetFileHeader();
+                engine.HeaderText = engine.GetFileHeader();
 
             
                 using (engine.BeginWriteFile(savePathTB.Text))
@@ -51,11 +47,13 @@ namespace AcademyScraper
                         engine.WriteNext(rec);
                     }
                 }
+
                 DialogResult result;
                 result = MessageBox.Show("Done! Open file?", "File generated.", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
                     System.Diagnostics.Process.Start(savePathTB.Text);
+                    Application.Exit();
                 }
 
             }

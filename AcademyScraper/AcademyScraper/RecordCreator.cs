@@ -74,77 +74,142 @@ namespace AcademyScraper
 
             }
 
-            String ageGroups = "";
+            List<String> recordAges = new List<String>();
 
-            foreach (var tag in ages)
+            foreach (var age in ages)
             {
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u6_Yes.gif")
+                
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u6_Yes.gif")
                 {
-                    ageGroups += " U6 ";
+                    recordAges.Add(" U6 ");
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u7_Yes.gif")
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u6_.gif")
                 {
-                    ageGroups += " U7 ";
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u8_Yes.gif")
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u7_Yes.gif")
                 {
-                    ageGroups += " U8 ";
+                    recordAges.Add(" U7 ");
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u9_Yes.gif")
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u7_.gif")
                 {
-                    ageGroups += " U9 ";
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u10_Yes.gif")
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u8_Yes.gif")
                 {
-                    ageGroups += " U10 ";
+                    recordAges.Add(" U8 ");
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u11_Yes.gif")
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u8_.gif")
                 {
-                    ageGroups += " U11 ";
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u12_Yes.gif")
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u9_Yes.gif")
                 {
-                    ageGroups += " U12 ";
+                    recordAges.Add(" U9 ");
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u13_Yes.gif")
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u9_.gif")
                 {
-                    ageGroups += " U13 ";
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u14_Yes.gif")
+
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u10_Yes.gif")
                 {
-                    ageGroups += " U14 ";
+                    recordAges.Add(" U10 ");
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u15_Yes.gif")
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u10_.gif")
                 {
-                    ageGroups += " U15 ";
                     continue;
                 }
-                if (tag.GetAttributeValue("src", "nope") == "images/2016/u16_Yes.gif")
+
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u11_Yes.gif")
                 {
-                    ageGroups += " U16 ";
+                    recordAges.Add(" U11 ");
                     continue;
                 }
-                if(ageGroups != "")
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u11_.gif")
                 {
-                    tournamentAges.Add(ageGroups);
+                    continue;
                 }
-               
-                ageGroups = "";
+
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u12_Yes.gif")
+                {
+                    recordAges.Add(" U12 ");
+                    continue;
+                }
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u12_.gif")
+                {
+                    continue;
+                }
+
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u13_Yes.gif")
+                {
+                    recordAges.Add(" U13 ");
+                    continue;
+                }
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u13_.gif")
+                {
+                    continue;
+                }
+
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u14_Yes.gif")
+                {
+                    recordAges.Add(" U14 ");
+                    continue;
+                }
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u14_.gif")
+                {
+                    continue;
+                }
+
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u15_Yes.gif")
+                {
+                    recordAges.Add(" U15 ");
+                    continue;
+                }
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u15_.gif")
+                {
+                    continue;
+                }
+
+                if (age.GetAttributeValue("src", "nope") == "images/2016/u16_Yes.gif")
+                {
+                    recordAges.Add(" U16 ");
+                
+                }
+                else if (age.GetAttributeValue("src", "nope") == "images/2016/u16_.gif")
+                {
+           
+                }
+
+                String final = "";
+                foreach (String record in recordAges)
+                {
+
+                    final += record;
+
+                }
+
+                tournamentAges.Add(final);
+                recordAges.Clear();
+
             }
-           
-           
+          
 
-
-
+            #region Links
             foreach (var tag in links)
             {
 
@@ -157,15 +222,18 @@ namespace AcademyScraper
 
             }
 
+            #endregion
+
+            #region Spaces
             foreach (var tag in spaces)
             {
                 String space = tag.InnerText.Replace(",","");
                 tournamentSpaces.Add(space);
 
             }
+            #endregion
 
-            
-
+            #region Build Record List
             for (var i = 0; i < tournamentNames.Count(); i++)
             {
                 recordList.Add(new Record()
@@ -182,7 +250,11 @@ namespace AcademyScraper
             }
 
             return recordList;
+            #endregion
+
 
         }
+
+
     }
 }
