@@ -43,11 +43,8 @@ namespace AcademyScraper
                 if (tag.InnerText != "View Available Space and Book Online" && tag.InnerText != "Check Availability & Book Online")
                 {
                     String title = tag.InnerText.Replace(",", "");
-                    title = title.Replace("=-", "");
-                    if(title == "=-GRASSROOTS TROPHY EVENT WOLVERHAMPTON") // total hack
-                    {
-                        title = "GRASSROOTS TROPHY EVENT WOLVERHAMPTON";
-                    }
+                    title = title.Replace("-", "");
+                   
                     tournamentNames.Add(title);
                 }
             }
