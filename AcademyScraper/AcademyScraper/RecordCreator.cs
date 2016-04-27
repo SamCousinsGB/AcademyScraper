@@ -49,7 +49,7 @@ namespace AcademyScraper
 
             foreach (var tag in names)
             {
-                if (tag.InnerText != "View Available Space and Book Online")
+                if (tag.InnerText != "View Available Space and Book Online" && tag.InnerText != "Check Availability & Book Online")
                 {
                     String title = tag.InnerText.Replace(",", "");
                     title = title.Replace("=", "");
@@ -241,7 +241,7 @@ namespace AcademyScraper
                
 
 
-                if(tag.InnerText != "View Available Space and Book Online")
+                if(tag.InnerText != "View Available Space and Book Online" && tag.InnerText != "Check Availability & Book Online")
                 {
                     string link = tag.GetAttributeValue("href", "N/A");
                     link = link.Replace("&nbsp;", "");
