@@ -23,7 +23,7 @@ namespace AcademyScraper
         public Main()
         {
             InitializeComponent();
-            savePathTB.Text = "C:/Users/" + Environment.UserName + "/Desktop/scrape.csv";
+            savePathTB.Text = "C:\\Users\\" + Environment.UserName + "\\Desktop\\scrape.csv";
         }
 
 
@@ -53,7 +53,7 @@ namespace AcademyScraper
                 if (result == DialogResult.Yes)
                 {
                     System.Diagnostics.Process.Start(savePathTB.Text);
-                    Application.Exit();
+                  
                 }
 
             }
@@ -69,6 +69,18 @@ namespace AcademyScraper
 
         }
 
+        private void browseBtn_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
 
+            DialogResult result = fbd.ShowDialog();
+
+            if (!string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+
+                savePathTB.Text = fbd.SelectedPath + "\\scrape.csv";
+
+            }
+        }
     }
 }
