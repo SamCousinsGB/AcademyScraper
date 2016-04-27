@@ -30,7 +30,7 @@ namespace AcademyScraper
             var ages = root.SelectNodes("//div[@class='infobox']/table/tr[5]/td/img");
             //    var perside = root.SelectNodes("//div[@class='infobox']/table/tr/td[1]/strong");
             var perside = root.SelectNodes(".//div[@class='infobox']/table/tr[4]/td[1]");
-            var genders = root.SelectNodes("//div[@class='infobox']/table/tr[3]/td[2]");
+            var genders = root.SelectNodes("//div[@class='infobox']/table/tr[4]/td[1]");
             var links = root.SelectNodes("//div[@class='infobox']/table/tr/td[1]/a");
             var spaces = root.SelectNodes("//div[@class='infobox']/table/tr[2]/td");
 
@@ -224,14 +224,45 @@ namespace AcademyScraper
                 }
                 else
                 {
-                    tournamentPerSide.Add("");
+                    tournamentPerSide.Add("None Specified");
                 }   
             }
-    
+
             #endregion
 
             #region Genders
+            foreach (var tag in genders)
+            {
+                String final = "";
+                HtmlNode boyNode = tag.SelectSingleNode(".//img[1]");
+                HtmlNode girlNode = tag.SelectSingleNode(".//img[2]");
+                HtmlNode disabledNode = tag.SelectSingleNode(".//img[3]");
 
+                if (boyNode != null && boyNode.GetAttributeValue("title", "none") == "Boy's Teams can enter this tournament")
+                {
+                    final += "M ";
+                }
+                if (girlNode != null && girlNode.GetAttributeValue("title", "none") == "Girl's Teams can enter this tournament")
+                {
+                    if(final != "")
+                    {
+                        final += "| F ";
+                    }
+                    else
+                    {
+                        final += " F ";
+                    }
+                }
+                if ((disabledNode != null && disabledNode.GetAttributeValue("title", "none") == "Disabled Teams can enter this tournament"))
+                {
+                    final += "| Disabled";
+                }
+
+                tournamentGenders.Add(final);
+            
+            }
+
+           
             #endregion
 
             #region Links
@@ -275,7 +306,7 @@ namespace AcademyScraper
                     ADDRESS = tournamentAddresses[i],
                     AGE_GROUPS = tournamentAges[i],
                     NUM_PER_SIDE = tournamentPerSide[i],
-                    GENDER = "",
+                    GENDER = tournamentGenders[i],
                     LINK = tournamentLinks[i],
                     SPACES = tournamentSpaces[i]
                 });
