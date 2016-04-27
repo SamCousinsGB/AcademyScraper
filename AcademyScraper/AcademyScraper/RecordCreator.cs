@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HtmlAgilityPack;
-using FileHelpers;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
-
 namespace AcademyScraper
 {
     class RecordCreator
@@ -16,19 +11,16 @@ namespace AcademyScraper
         public static List<Record> getRecords()
         {
 
-            string url = "http://www.reddishvulcans.com/uk_tournament_database.asp";
+            var url = "http://www.reddishvulcans.com/uk_tournament_database.asp";
             var Webget = new HtmlWeb();
             var doc = Webget.Load(url);
-
             var root = doc.DocumentNode;
 
 
             var names = root.SelectNodes("//div[@class='infobox']/table/tr/td[1]/a");
             var dates = root.SelectNodes("//div[@class='infobox']/table/tr[3]/td[2]");
-
-            var addresses = root.SelectNodes("//div[@class='infobox']/table/tr/td[1]");
+            var addresses = root.SelectNodes("//div[@class='infobox']/table/tr[1]/td[1]/text()");
             var ages = root.SelectNodes("//div[@class='infobox']/table/tr[5]/td/img");
-            //    var perside = root.SelectNodes("//div[@class='infobox']/table/tr/td[1]/strong");
             var perside = root.SelectNodes(".//div[@class='infobox']/table/tr[4]/td[1]");
             var genders = root.SelectNodes("//div[@class='infobox']/table/tr[4]/td[1]");
             var links = root.SelectNodes("//div[@class='infobox']/table/tr/td[1]/a");
@@ -46,13 +38,16 @@ namespace AcademyScraper
            
             #region Names - Done
 
-
             foreach (var tag in names)
             {
                 if (tag.InnerText != "View Available Space and Book Online" && tag.InnerText != "Check Availability & Book Online")
                 {
                     String title = tag.InnerText.Replace(",", "");
-                    title = title.Replace("=", "");
+                    title = title.Replace("=-", "");
+                    if(title == "=-GRASSROOTS TROPHY EVENT WOLVERHAMPTON") // total hack
+                    {
+                        title = "GRASSROOTS TROPHY EVENT WOLVERHAMPTON";
+                    }
                     tournamentNames.Add(title);
                 }
             }
@@ -74,11 +69,18 @@ namespace AcademyScraper
 
             #region Addresses
 
+
             foreach (var tag in addresses)
             {
-                tournamentAddresses.Add("1");
+               String final = tag.InnerText;
+               final = final.Trim();
+               final = final.Replace(",", " - ");
+                if(final != "" | final != null)
+                {
+                    //MessageBox.Show(final);
+                    tournamentAddresses.Add(final);
+                }
             }
-
             #endregion
 
             #region Ages - Done
@@ -211,7 +213,7 @@ namespace AcademyScraper
 
             #endregion
 
-            #region Perside
+            #region Perside - Done
 
 
 
@@ -230,7 +232,7 @@ namespace AcademyScraper
 
             #endregion
 
-            #region Genders
+            #region Genders - Done
             foreach (var tag in genders)
             {
                 String final = "";
@@ -265,12 +267,9 @@ namespace AcademyScraper
            
             #endregion
 
-            #region Links
+            #region Links - Done
             foreach (var tag in links)
             {
-
-               
-
 
                 if(tag.InnerText != "View Available Space and Book Online" && tag.InnerText != "Check Availability & Book Online")
                 {
@@ -287,7 +286,7 @@ namespace AcademyScraper
 
             #endregion
 
-            #region Spaces
+            #region Spaces - Done
             foreach (var tag in spaces)
             {
                 String space = tag.InnerText.Replace(",","");
